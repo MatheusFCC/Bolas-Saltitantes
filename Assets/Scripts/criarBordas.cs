@@ -21,6 +21,6 @@ public class InitInverted2DEdges : MonoBehaviour {
 
             points[i] = new Vector2(x, y);
         }
-edgeCollider.points = points;
+        edgeCollider.points = points;
     }
 }
