@@ -4,26 +4,67 @@ public class ColisaoComBola : MonoBehaviour
 {
     public GameObject ballPrefab; // Prefab da bola
     public Transform initialPosition; // Transform que define a posição inicial das bolas
-    [SerializeField] public int maxBalls = 10; // Número máximo de bolas permitido
+    [SerializeField] private int maxBalls = 10; // Número máximo de bolas permitido
+    [SerializeField] private bool aumentarTamanho = false; // Define o comportamento da colisão
 
     private int currentBallCount = 0; // Contador de bolas instanciadas
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Verifica se o objeto que colidiu é uma bola
         if (collision.gameObject.CompareTag("Bola"))
         {
-            // Apenas cria uma nova bola se não ultrapassar o limite
-            if (currentBallCount < maxBalls)
+            Rigidbody2D ballRb = collision.gameObject.GetComponent<Rigidbody2D>();
+            Transform ballTransform = collision.gameObject.transform;
+
+            if (ballRb != null)
             {
-                Instantiate(ballPrefab, initialPosition.position, Quaternion.identity);
-                currentBallCount++; // Incrementa o contador de bolas
+                Vector2 normal = collision.contacts[0].normal;
+                Vector2 incomingVelocity = ballRb.linearVelocity;
+                Vector2 reflection = Vector2.Reflect(incomingVelocity, normal);
+
+                // Adiciona variação de ângulo aleatória
+                float randomAngle = Random.Range(-20f, 20f);
+                reflection = Quaternion.Euler(0, 0, randomAngle) * reflection;
+
+                // Ajusta a velocidade com um pequeno impulso extra para evitar "grudar"
+                float speedMultiplier = Random.Range(0.9f, 1.1f);
+                ballRb.linearVelocity = reflection * speedMultiplier;
+
+                // Adiciona um impulso extra para afastar da parede
+                ballRb.AddForce(normal * 1.8f, ForceMode2D.Impulse);
+            }
+
+            if (aumentarTamanho)
+            {
+                AumentarTamanhoInstantaneo(ballTransform, ballRb);
             }
             else
             {
-                Debug.Log("Limite de bolas atingido!");
+                if (currentBallCount < maxBalls)
+                {
+                    Instantiate(ballPrefab, initialPosition.position, Quaternion.identity);
+                    currentBallCount++;
+                }
+                else
+                {
+                    Debug.Log("Limite de bolas atingido!");
+                }
             }
         }
     }
-}
 
+    private void AumentarTamanhoInstantaneo(Transform ballTransform, Rigidbody2D ballRb)
+    {
+        Vector3 targetScale = ballTransform.localScale * 1.1f;
+        ballTransform.localScale = targetScale;
+
+        if (ballTransform.localScale.x >= 8.2f)
+        {
+            targetScale = new Vector3(8.2f, 8.2f, 8.2f); // Limitando o crescimento a 8.2
+            ballRb.linearVelocity = Vector2.zero; // Parar movimento
+            ballRb.isKinematic = true; // Parar de ser afetado por física
+            ballRb.simulated = false; // Desativar colisões
+            ballTransform.position = Vector3.zero; // Teleporta para 0, 0, 0
+        }
+    }
+}

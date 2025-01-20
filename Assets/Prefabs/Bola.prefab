@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 2308860741805126213}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.2, y: 2.2, z: 0}
-  m_LocalScale: {x: 0.2959, y: 0.2959, z: 1}
+  m_LocalPosition: {x: -0.0305, y: 1.9513, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -103,9 +103,9 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.15
   m_AngularDamping: 0.05
-  m_GravityScale: 0.2
+  m_GravityScale: 0.5
   m_Material: {fileID: 6200000, guid: b9312864b36bb0547a4981b98e050551, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -165,6 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0df6a9e79c83a1c42a738a4a93d9437f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minVeloci: 0
-  maxVeloci: 2
-  anguloInicial: 178
+  minVeloci: 1
+  maxVeloci: 3
+  anguloInicial: 270
