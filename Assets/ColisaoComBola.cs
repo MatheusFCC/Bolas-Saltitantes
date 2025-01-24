@@ -9,6 +9,15 @@ public class ColisaoComBola : MonoBehaviour
 
     private int currentBallCount = 0; // Contador de bolas instanciadas
 
+
+    private void Start()
+    {
+        // Carrega o valor salvo do toggle Crescer ao iniciar a cena
+        if (PlayerPrefs.HasKey("CrescerToggle"))
+        {
+            aumentarTamanho = PlayerPrefs.GetInt("CrescerToggle") == 1;
+        }
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Bola"))
